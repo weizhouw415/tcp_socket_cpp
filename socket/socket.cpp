@@ -59,52 +59,76 @@ int recvMessage(int receiving_socket, char *buffer, int buffer_size) {
     return bytes_received;
 }
 
-void showMessage(char *buffer, int usage) {
-    string prefix;
-    if (usage == 76)
-        prefix = PRE_RECV_MSG;
-    else if (usage == 86)
-        prefix = PRE_RECV_RPL;
-    cout << prefix << buffer << endl;
-}
-
-void checkStatus(int broken_socket, int usage) {
-    if (broken_socket < 0) {
-        if (usage == 71)
-            cerr << ERR_CREATE_SOCKET << endl;
-        else if (usage == 72)
-            cerr << ERR_BIND_ADDRESS << endl;
-        else if (usage == 73)
-            cerr << ERR_LISTEN_SOCKET << endl;
-        else if (usage == 74)
-            cerr << ERR_CONN_CLIENT << endl;
-        else if (usage == 75)
-            cerr << ERR_SEND_REPLY << endl;
-        else if (usage == 76)
-            cerr << ERR_RECV_MESSAGE << endl;
-        else if (usage == 83)
-            cerr << ERR_CONV_ADDR << endl;
-        else if (usage == 84)
-            cerr << ERR_CONN_SERVER << endl;
-        else if (usage == 85)
-            cerr << ERR_SEND_MESSAGE << endl;
-        else if (usage == 86)
-            cerr << ERR_RECV_REPLY << endl;
-        else
-            cerr << ERR_UNKNOWN << endl;
-        close(broken_socket);
+void checkCreateSocket(int a_socket) {
+    if (a_socket == -1) {
+        cerr << ERR_CREATE_SOCKET << endl;
+        close(a_socket);
         exit(1);
     }
-    else {
-        if (usage == 73)
-            cout << CORR_LISTEN_SOCKET << endl;
-        else if (usage == 74)
-            cout << CORR_CONN_CLIENT << endl;
-        else if (usage == 75)
-            cout << CORR_SEND_REPLY << endl;
-        else if (usage == 84)
-            cout << CORR_CONN_SERVER << endl;
-        else if (usage == 85)
-            cout << CORR_SEND_MESSAGE << endl;
-    } 
+}
+
+void checkBindAddress(int bind_result, int listening_socket) {
+    if (bind_result == -1) {
+        cerr << ERR_BIND_ADDRESS << endl;
+        close(listening_socket);
+        exit(2);
+    }
+}
+
+void checkListenSocket(int listening_socket) {
+    if (listening_socket == -1) {
+        cerr << ERR_LISTEN_SOCKET << endl;
+        close(listening_socket);
+        exit(3);
+    }
+    else
+        cout << CORR_LISTEN_SOCKET << endl;
+}
+
+void checkConnectClient(int handling_socket, int listening_socket) {
+    if (handling_socket == -1) {
+        cerr << ERR_CONN_CLIENT << endl;
+        close(listening_socket);
+        exit(4);
+    }
+    else
+        cout << CORR_CONN_CLIENT << endl;
+}
+
+void checkConvertIP(int convert_ip, int listening_socket) {
+    if (convert_ip == -1) {
+        cerr << ERR_CONV_ADDR << endl;
+        close(listening_socket);
+        exit(5);
+    }
+}
+
+void checkConnectServer(int connect_status, int listening_socket) {
+    if (connect_status == -1) {
+        cerr << ERR_CONN_SERVER << endl;
+        close(listening_socket);
+        exit(6);
+    }
+    else
+        cout << CORR_CONN_SERVER << endl;
+}
+
+void checkSendMessage (int msg_sent, int listening_socket) {
+    if (msg_sent == -1) {
+        cerr << ERR_SEND_MESSAGE << endl;
+        close(listening_socket);
+        exit(7);
+    }
+    else
+        cout << CORR_SEND_MESSAGE << endl;
+}
+
+void checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer) {
+    if (msg_rcvd == -1) {
+        cerr << ERR_RECV_MESSAGE << endl;
+        close(listening_socket);
+        exit(8);
+    }
+    else
+        cout << CORR_RECV_MESSAGE << buffer << endl;
 }

@@ -1,3 +1,6 @@
+#ifndef _SOCKET_H_
+#define _SOCKET_H_
+
 #include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -25,6 +28,21 @@ int sendMessage(int sending_socket, char *message);
 
 int recvMessage(int receiving_socket, char *buffer, int buffer_size);
 
-void showMessage(char *buffer, int usage);
+//check
+void checkCreateSocket(int a_socket);
 
-void checkStatus(int broken_socket, int usage);
+void checkBindAddress(int bind_result, int listening_socket);
+
+void checkListenSocket(int listening_socket);
+
+void checkConnectClient(int handling_socket, int listening_socket);
+
+void checkConvertIP(int convert_ip, int listening_socket);
+
+void checkConnectServer(int connect_status, int listening_socket);
+
+void checkSendMessage (int msg_sent, int listening_socket);
+
+void checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer);
+
+#endif

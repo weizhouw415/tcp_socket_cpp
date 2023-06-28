@@ -3,10 +3,10 @@ CFLAGS = -std=c++11 -Iheaders/ -Isocket/
 
 all: server client
 
-server:
+server: server.cpp 
 	$(CC) $(CFLAGS) -o server server.cpp socket/socket.cpp
 
-client:
+client: client.cpp 
 	$(CC) $(CFLAGS) -o client client.cpp socket/socket.cpp
 
 clean:

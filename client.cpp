@@ -9,27 +9,26 @@ int main(int argc, char* argv[]) {
 
     // 创建客户端socket
     int client_socket = createListeningSocket();
-    checkStatus(client_socket, CREATE_SOCKET);
+    checkCreateSocket(client_socket);
     
     // 设置服务器地址
     
     sockaddr_in server_address = createSocketAddress(port);
     int conv_ip = convertIP(ip_addr, &(server_address.sin_addr));
-    checkStatus(conv_ip, CONV_ADDR); 
+    checkConvertIP(conv_ip, client_socket); 
     
     // 连接到服务器
     int conn_status = connectServer(client_socket, server_address);
-    checkStatus(conn_status, CONN_SERVER); 
+    checkConnectServer(conn_status, client_socket); 
     
     // 发送消息给服务器
     int msg_sent = sendMessage(client_socket, message);
-    checkStatus(msg_sent, SEND_MESSAGE);
+    checkSendMessage(msg_sent, client_socket);
        
     // 接收服务器回复
     char client_buffer[BUFFER_SIZE];
     int reply_rcvd = recvMessage(client_socket, client_buffer, BUFFER_SIZE);
-    checkStatus(reply_rcvd, RECV_REPLY);
-    showMessage(client_buffer, RECV_REPLY);
+    checkReceiveMessage(reply_rcvd, client_socket, client_buffer);
 
     // 关闭连接和socket
     closeSocket(client_socket);
