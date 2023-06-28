@@ -1,5 +1,6 @@
 #include "common/constant.h"
 #include "socket/socket.h"
+#include "socket/check.h"
 
 int main(int argc, char* argv[]) {
     // 命令行参数
@@ -37,9 +38,9 @@ int main(int argc, char* argv[]) {
         checkSendMessage(reply_sent, listening_socket);
 
         // 关闭连接和socket
-        closeSocket(handling_socket);
+        close(handling_socket);
     }
-    closeSocket(listening_socket);
+    close(listening_socket);
     
     return 0;
 }
