@@ -11,7 +11,7 @@ void checkBindAddress(int bind_result, int listening_socket);
 
 void checkListenSocket(int listening_socket);
 
-void checkConnectClient(int handling_socket, int listening_socket);
+bool checkConnectClient(int handling_socket);
 
 void checkConvertIP(int convert_ip, int listening_socket);
 

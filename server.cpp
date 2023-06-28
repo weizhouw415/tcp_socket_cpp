@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
     char *reply = argv[2];
 
     // 创建服务器端socket
-    int listening_socket = createListeningSocket();
+    int listening_socket = createNonBlockSocket();
     checkCreateSocket(listening_socket);
     
     // 设置服务器地址
@@ -20,13 +20,12 @@ int main(int argc, char* argv[]) {
 
     // 开始监听连接
     int listening_status = listenSocket(listening_socket);
+    checkListenSocket(listening_socket);
 
     while(true) {
-        checkListenSocket(listening_socket);
-
-        // 接受客户端连接
         int handling_socket = createHandlingSocket(listening_socket);
-        checkConnectClient(handling_socket, listening_socket);
+        if (checkConnectClient(handling_socket))
+            continue;
         
         // 接收和处理客户端消息
         char server_buffer[BUFFER_SIZE];

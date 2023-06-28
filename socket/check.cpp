@@ -3,13 +3,24 @@
 
 using namespace std;
 
-void checkCreateSocket(int a_socket) {
-    if (a_socket == -1) {
+void checkCreateSocket(int new_socket) {
+    if (new_socket == -1) {
         cerr << ERR_CREATE_SOCKET << endl;
-        close(a_socket);
         exit(1);
     }
 }
+    /* 设置套接字为非阻塞模式
+    int flags = fcntl(listening_socket, F_GETFL, 0);
+    if (flags == -1) {
+        std::cerr << "获取套接字标志失败" << std::endl;
+        close(listening_socket);
+        return 1;
+    }
+    if (fcntl(listening_socket, F_SETFL, flags | O_NONBLOCK) == -1) {
+        std::cerr << "设置套接字为非阻塞模式失败" << std::endl;
+        close(listening_socket);
+        return 1;
+    }   */
 
 void checkBindAddress(int bind_result, int listening_socket) {
     if (bind_result == -1) {
@@ -29,14 +40,18 @@ void checkListenSocket(int listening_socket) {
         cout << CORR_LISTEN_SOCKET << endl;
 }
 
-void checkConnectClient(int handling_socket, int listening_socket) {
+bool checkConnectClient(int handling_socket) {
     if (handling_socket == -1) {
+        if (errno == EWOULDBLOCK || errno == EAGAIN) {
+            // 没有新的连接请求，继续循环
+            return true;
+        }
         cerr << ERR_CONN_CLIENT << endl;
-        close(listening_socket);
-        exit(4);
+        close(handling_socket);
     }
     else
         cout << CORR_CONN_CLIENT << endl;
+    return false;
 }
 
 void checkConvertIP(int convert_ip, int listening_socket) {
@@ -58,21 +73,15 @@ void checkConnectServer(int connect_status, int listening_socket) {
 }
 
 void checkSendMessage (int msg_sent, int listening_socket) {
-    if (msg_sent == -1) {
+    if (msg_sent == -1)
         cerr << ERR_SEND_MESSAGE << endl;
-        close(listening_socket);
-        exit(7);
-    }
     else
         cout << CORR_SEND_MESSAGE << endl;
 }
 
 void checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer) {
-    if (msg_rcvd == -1) {
+    if (msg_rcvd == -1) 
         cerr << ERR_RECV_MESSAGE << endl;
-        close(listening_socket);
-        exit(8);
-    }
     else
         cout << CORR_RECV_MESSAGE << buffer << endl;
 }

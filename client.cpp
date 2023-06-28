@@ -9,11 +9,10 @@ int main(int argc, char* argv[]) {
     char *message = argv[3];
 
     // 创建客户端socket
-    int client_socket = createListeningSocket();
+    int client_socket = createSocket();
     checkCreateSocket(client_socket);
     
     // 设置服务器地址
-    
     sockaddr_in server_address = createSocketAddress(port);
     int conv_ip = convertIP(ip_addr, &(server_address.sin_addr));
     checkConvertIP(conv_ip, client_socket); 
@@ -25,7 +24,7 @@ int main(int argc, char* argv[]) {
     // 发送消息给服务器
     int msg_sent = sendMessage(client_socket, message);
     checkSendMessage(msg_sent, client_socket);
-       
+    
     // 接收服务器回复
     char client_buffer[BUFFER_SIZE];
     int reply_rcvd = recvMessage(client_socket, client_buffer, BUFFER_SIZE);

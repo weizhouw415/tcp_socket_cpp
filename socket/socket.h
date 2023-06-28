@@ -5,8 +5,11 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
-int createListeningSocket();
+int createSocket();
+
+int createNonBlockSocket();
 
 int createHandlingSocket(int listening_socket);
 

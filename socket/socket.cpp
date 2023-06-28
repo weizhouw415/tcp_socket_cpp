@@ -2,8 +2,18 @@
 
 using namespace std;
 
-int createListeningSocket() {
-    int listening_socket = socket(AF_INET, SOCK_STREAM, 0);
+int createSocket() {
+    int listening_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    return listening_socket;
+}
+
+int createNonBlockSocket() {
+    int listening_socket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
+    
+    // 设置套接字为非阻塞模式
+    int flags = fcntl(listening_socket, F_GETFL, 0);
+    fcntl(listening_socket, F_SETFL, flags | O_NONBLOCK);
+
     return listening_socket;
 }
 
