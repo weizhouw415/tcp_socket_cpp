@@ -7,8 +7,14 @@ int main(int argc, char* argv[]) {
     int port = atoi(argv[1]);
     char *reply = argv[2];
 
+    // 设置超时时间为5秒
+    struct timeval timeout;
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
+
     // 创建服务器端socket
     int listening_socket = createNonBlockSocket();
+    //int listening_socket = createSocket();
     checkCreateSocket(listening_socket);
     
     // 设置服务器地址
@@ -23,14 +29,16 @@ int main(int argc, char* argv[]) {
     checkListenSocket(listening_socket);
 
     while(true) {
-        int handling_socket = createHandlingSocket(listening_socket);
+        sockaddr_in client_address{};
+        int handling_socket = createHandlingSocket(listening_socket, client_address);
         if (checkConnectClient(handling_socket))
             continue;
-        
+
         // 接收和处理客户端消息
         char server_buffer[BUFFER_SIZE];
         int msg_rcvd = recvMessage(handling_socket, server_buffer, BUFFER_SIZE);
-        checkReceiveMessage(msg_rcvd, listening_socket, server_buffer);
+        if (checkReceiveMessage(msg_rcvd, listening_socket, server_buffer))
+            continue;
     
         // 发送回复给客户端
         int reply_sent = sendMessage(handling_socket, reply); 

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <errno.h>
+#include <sys/time.h>
 
 //check
 void checkCreateSocket(int a_socket);
@@ -19,6 +21,6 @@ void checkConnectServer(int connect_status, int listening_socket);
 
 void checkSendMessage (int msg_sent, int listening_socket);
 
-void checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer);
+bool checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer);
 
 #endif

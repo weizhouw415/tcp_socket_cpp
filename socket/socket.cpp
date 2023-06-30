@@ -17,10 +17,9 @@ int createNonBlockSocket() {
     return listening_socket;
 }
 
-int createHandlingSocket(int listening_socket) {
-    sockaddr_in address{};
+int createHandlingSocket(int listening_socket, sockaddr_in address) {
     socklen_t address_length = sizeof(address);
-    int handling_socket = accept(listening_socket, (struct sockaddr *)&address, &address_length);
+    int handling_socket = accept4(listening_socket, (struct sockaddr *)&address, &address_length, SOCK_NONBLOCK);
     return handling_socket;
 }
 

@@ -11,7 +11,7 @@ int createSocket();
 
 int createNonBlockSocket();
 
-int createHandlingSocket(int listening_socket);
+int createHandlingSocket(int listening_socket, sockaddr_in address);
 
 sockaddr_in createSocketAddress(int port);
 
@@ -26,7 +26,5 @@ int connectServer(int client_socket, sockaddr_in server_address);
 int sendMessage(int sending_socket, char *message);
 
 int recvMessage(int receiving_socket, char *buffer, int buffer_size);
-
-
 
 #endif

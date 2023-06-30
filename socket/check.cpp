@@ -5,7 +5,7 @@ using namespace std;
 
 void checkCreateSocket(int new_socket) {
     if (new_socket == -1) {
-        cerr << ERR_CREATE_SOCKET << endl;
+        cerr << errno << ERR_CREATE_SOCKET << endl;
         exit(1);
     }
 }
@@ -24,7 +24,7 @@ void checkCreateSocket(int new_socket) {
 
 void checkBindAddress(int bind_result, int listening_socket) {
     if (bind_result == -1) {
-        cerr << ERR_BIND_ADDRESS << endl;
+        cerr << errno << ERR_BIND_ADDRESS << endl;
         close(listening_socket);
         exit(2);
     }
@@ -32,9 +32,9 @@ void checkBindAddress(int bind_result, int listening_socket) {
 
 void checkListenSocket(int listening_socket) {
     if (listening_socket == -1) {
-        cerr << ERR_LISTEN_SOCKET << endl;
+        cerr << errno << ERR_LISTEN_SOCKET << endl;
         close(listening_socket);
-        exit(3);
+        //exit(3);
     }
     else
         cout << CORR_LISTEN_SOCKET << endl;
@@ -45,8 +45,8 @@ bool checkConnectClient(int handling_socket) {
         if (errno == EWOULDBLOCK || errno == EAGAIN) {
             // 没有新的连接请求，继续循环
             return true;
-        }
-        cerr << ERR_CONN_CLIENT << endl;
+        }   
+        cerr << errno << ERR_CONN_CLIENT << endl;
         close(handling_socket);
     }
     else
@@ -56,17 +56,17 @@ bool checkConnectClient(int handling_socket) {
 
 void checkConvertIP(int convert_ip, int listening_socket) {
     if (convert_ip == -1) {
-        cerr << ERR_CONV_ADDR << endl;
+        cerr << errno << ERR_CONV_ADDR << endl;
         close(listening_socket);
-        exit(5);
+        //exit(5);
     }
 }
 
 void checkConnectServer(int connect_status, int listening_socket) {
     if (connect_status == -1) {
-        cerr << ERR_CONN_SERVER << endl;
+        cerr << errno << ERR_CONN_SERVER << endl;
         close(listening_socket);
-        exit(6);
+        //exit(6);
     }
     else
         cout << CORR_CONN_SERVER << endl;
@@ -74,14 +74,19 @@ void checkConnectServer(int connect_status, int listening_socket) {
 
 void checkSendMessage (int msg_sent, int listening_socket) {
     if (msg_sent == -1)
-        cerr << ERR_SEND_MESSAGE << endl;
+        cerr << errno << ERR_SEND_MESSAGE << endl;
     else
         cout << CORR_SEND_MESSAGE << endl;
 }
 
-void checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer) {
-    if (msg_rcvd == -1) 
-        cerr << ERR_RECV_MESSAGE << endl;
+bool checkReceiveMessage (int msg_rcvd, int listening_socket, char* buffer) {
+    if (msg_rcvd == -1) {
+        if (errno == EWOULDBLOCK || errno == EAGAIN) {
+            // 没有新的连接请求，继续循环
+        }  
+        cerr << errno << ERR_RECV_MESSAGE << endl;
+    }
     else
         cout << CORR_RECV_MESSAGE << buffer << endl;
+    return false;
 }

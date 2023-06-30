@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
     int port = atoi(argv[2]);
     char *message = argv[3];
 
+    while(true) {
     // 创建客户端socket
     int client_socket = createSocket();
     checkCreateSocket(client_socket);
@@ -20,7 +21,7 @@ int main(int argc, char* argv[]) {
     // 连接到服务器
     int conn_status = connectServer(client_socket, server_address);
     checkConnectServer(conn_status, client_socket); 
-    
+
     // 发送消息给服务器
     int msg_sent = sendMessage(client_socket, message);
     checkSendMessage(msg_sent, client_socket);
@@ -32,6 +33,9 @@ int main(int argc, char* argv[]) {
 
     // 关闭连接和socket
     close(client_socket);
-    
+
+    sleep(1);
+    }
+
     return 0;
 }
