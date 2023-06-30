@@ -9,7 +9,6 @@ server: server.cpp
 client: client.cpp 
 	$(CC) $(CFLAGS) -o client client.cpp socket/socket.cpp socket/check.cpp
 
-
 clean:
 	rm -f server 
 	rm -f client
