@@ -6,7 +6,7 @@ const char *CORR_CLOSE_SOCKET = "成功关闭套接字";
 const char *CORR_LISTEN_SOCKET = "\n正在监听...等待客户端连接...";
 const char *CORR_CONN_CLIENT = "\n成功连接客户端";
 const char *CORR_RECV_MESSAGE = "收到的消息: ";
-const char *CORR_CONN_SERVER = "成功连接到服务器";
+const char *CORR_CONN_SERVER = "\n成功连接到服务器";
 const char *CORR_SEND_MESSAGE = "成功发送消息";
 
 //失败消息

@@ -52,8 +52,9 @@ int main(int argc, char* argv[]) {
 
     // 循环等待和处理消息
     while (true) {
+        std::cout << std::endl << "Listening..." << std::endl;
+        
         // 监视文件描述符集合中的可读事件
-        std::cout << "\nListening..." << std::endl;
         if (select(serverSocket + 1, &readSet, nullptr, nullptr, nullptr) == -1) {
             std::cerr << "Failed to select: " << errno << std::endl;
             return 1;
@@ -107,13 +108,13 @@ int main(int argc, char* argv[]) {
                 // 处理接收到的消息 
                 if (errno == EAGAIN) {
                     std::cout << "Send error back to client..." << std::endl;
-                    char *not_rcvd = "Did not receive the message.";
-                    int err_sent = send(clientSocket, not_rcvd, strlen(not_rcvd), 0);
+                    std::string fail_rcvd = "Did not receive the message.";
+                    int err_sent = send(clientSocket, fail_rcvd.c_str(), fail_rcvd.length(), 0);
                     continue;
                 }
                 std::cout << "Received message from client: " << buffer << std::endl;
-                char *message = "Hello client! Received your message.";
-                int bytes_sent = send(clientSocket, message, strlen(message), 0);
+                std::string reply = "Select server received your message.";
+                int bytes_sent = send(clientSocket, reply.c_str(), reply.length(), 0);
                 if (bytes_sent == -1) {
                     std::cerr << "Failed to send message: " << errno << std::endl;
                 }

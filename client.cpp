@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
     // 关闭连接和socket
     close(client_socket);
 
-    //sleep(1);
-    usleep(300000);
+    sleep(1);
+    //usleep(300000);
     }
 
     return 0;
