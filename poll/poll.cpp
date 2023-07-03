@@ -55,9 +55,9 @@ int main(int argc, char* argv[]) {
     clientSockets[0].events = POLLIN;
 
     while (true) {
-        // 使用poll函数等待文件描述符就绪
-        std::cout << std::endl << "Server started, waiting for connections..." << std::endl;
+        std::cout << std::endl << "😂Server started, waiting for connections..." << std::endl;
 
+        // 使用poll函数等待文件描述符就绪
         int ready = poll(clientSockets, MAX_CLIENTS, -1);
         if (ready == -1) {
             std::cerr << "Failed to poll sockets" << std::endl;
