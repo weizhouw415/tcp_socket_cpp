@@ -5,10 +5,12 @@
 #include <cstring>
 #include <arpa/inet.h>
 
-#define MAX_EVENTS 10
-#define BUFFER_SIZE 1024
+const int MAX_EVENTS = 10;
+const int BUFFER_SIZE = 1024;
 
-int main() {
+int main(int argc, char* argv[]) {
+    int port = atoi(argv[1]);
+
     // 创建监听socket
     int listenSocket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
     if (listenSocket == -1) {
@@ -24,7 +26,7 @@ int main() {
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-    serverAddress.sin_port = htons(8080);
+    serverAddress.sin_port = htons(port);
     if (bind(listenSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
         std::cerr << "Failed to bind address" << std::endl;
         return 1;
@@ -59,6 +61,7 @@ int main() {
     epoll_event events[MAX_EVENTS];
     while (true) {
         // 等待事件发生
+        std::cout << std::endl << "Listening...Waiting for events..." << std::endl;
         int numEvents = epoll_wait(epollInstance, events, MAX_EVENTS, -1);
         if (numEvents == -1) {
             std::cerr << "Failed to wait for events" << std::endl;
@@ -79,12 +82,14 @@ int main() {
                     if (clientSocket == -1) {
                         // 如果没有新连接，跳出循环
                         if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                            std::cerr << errno << " EAGAIN: no new connection" <<std::endl;
                             break;
                         } else {
                             std::cerr << "Failed to accept new connection" << std::endl;
                             return 1;
                         }
                     }
+                    std::cout << "create client socket successfully" <<std::endl;
 
                     // 设置客户端socket为非阻塞模式
                     int flags = fcntl(clientSocket, F_GETFL, 0);
@@ -109,6 +114,7 @@ int main() {
                     if (bytesRead == -1) {
                         // 如果没有更多数据可读，跳出循环
                         if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                            std::cerr << errno << " EAGAIN: no more data to read" <<std::endl;
                             break;
                         } else {
                             std::cerr << "Failed to read data from client" << std::endl;
@@ -128,6 +134,7 @@ int main() {
                             std::cerr << "Failed to send data to client" << std::endl;
                             return 1;
                         }
+                        std::cout << "Send reply successfully" <<std::endl;
                     }
                 }
             }

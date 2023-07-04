@@ -78,7 +78,9 @@ int main(int argc, char* argv[]) {
             }
 
             // 处理新的客户端连接
-            std::cout << "Accepted new client connection." << std::endl;
+            std::cout << "Accepted new connection from "
+                              << inet_ntoa(clientAddress.sin_addr)
+                              << ":" << ntohs(clientAddress.sin_port) << std::endl;
 
             // 将客户端套接字添加到监视集合中
             FD_SET(clientSocket, &readSet);
@@ -87,13 +89,13 @@ int main(int argc, char* argv[]) {
         // 处理已连接的客户端的消息
         for (int clientSocket = serverSocket + 1; clientSocket <= FD_SETSIZE; ++clientSocket) {
             if (FD_ISSET(clientSocket, &readSet)) {
-                std::cout << "client socket: " << clientSocket << std::endl;
+                //std::cout << "client socket: " << clientSocket << std::endl;
                 char buffer[2048];
                 memset(buffer, 0, sizeof(buffer));
 
                 // 读取客户端发送的消息
                 ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, MSG_DONTWAIT);
-                std::cout << "bytes read: " << bytesRead <<std::endl;
+                //std::cout << "bytes read: " << bytesRead <<std::endl;
                 if (bytesRead == -1) {
                     std::cerr << "Failed to receive data from client: " << errno << std::endl;
                     //continue;

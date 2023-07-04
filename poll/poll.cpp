@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     clientSockets[0].events = POLLIN;
 
     while (true) {
-        std::cout << std::endl << "😂Server started, waiting for connections..." << std::endl;
+        std::cout << std::endl << "Server started, waiting for connections..." << std::endl;
 
         // 使用poll函数等待文件描述符就绪
         int ready = poll(clientSockets, MAX_CLIENTS, -1);
@@ -81,7 +81,9 @@ int main(int argc, char* argv[]) {
                 if (clientSockets[i].fd == 0) {
                     clientSockets[i].fd = clientSocket;
                     clientSockets[i].events = POLLIN;
-                    std::cout << "New client connected" << std::endl;
+                    std::cout << "Accepted new connection from "
+                              << inet_ntoa(clientAddress.sin_addr)
+                              << ":" << ntohs(clientAddress.sin_port) << std::endl;
                     break;
                 }
             }
