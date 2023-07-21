@@ -4,9 +4,9 @@
 
 int main(int argc, char* argv[]) {
     // 命令行参数
-    char *ip_addr = argv[1];
-    int port = atoi(argv[2]);
-    char *message = argv[3];
+    std::string ip_addr = (argc > 1) ? argv[1] : DEFAULT_IP_ADDR;
+    int port = (argc > 2) ? atoi(argv[2]) : DEFAULT_PORT;
+    std::string message = (argc > 3) ? argv[3] : DEFAULT_SEND_MESSAGE;
 
     while(true) {
     // 创建客户端socket
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     checkConnectServer(conn_status, client_socket); 
 
     // 发送消息给服务器
-    int msg_sent = sendMessage(client_socket, message);
+    int msg_sent = sendMessage(client_socket, message.c_str());
     checkSendMessage(msg_sent, client_socket);
     
     // 接收服务器回复

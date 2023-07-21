@@ -36,8 +36,8 @@ int bindAddress(int listening_socket, sockaddr_in server_address) {
     return bind_result;
 }
 
-int convertIP(char *ip_addr, struct in_addr* address) {
-    int conn_server = inet_pton(AF_INET, ip_addr, address);
+int convertIP(string ip_addr, struct in_addr* address) {
+    int conn_server = inet_pton(AF_INET, ip_addr.c_str(), address);
     return conn_server;
 }
 
@@ -51,8 +51,8 @@ int listenSocket(int listening_socket) {
     return listening_status;
 }
 
-int sendMessage(int sending_socket, char *message) {
-    int bytes_sent = send(sending_socket, message, strlen(message), 0);
+int sendMessage(int sending_socket, string message) {
+    int bytes_sent = send(sending_socket, message.c_str(), strlen(message.c_str()), 0);
     return bytes_sent;
 }
 

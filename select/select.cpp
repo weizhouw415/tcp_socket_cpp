@@ -8,8 +8,12 @@
 #include <errno.h>
 #include <cerrno>
 
+const int DEFAULT_PORT = 5000;
+const char* DEFAULT_REPLY = "Select server received your message.";
+
 int main(int argc, char* argv[]) {
-    int port = atoi(argv[1]);
+    int port = (argc > 1) ? atoi(argv[1]) : DEFAULT_PORT;
+    std::string reply = (argc > 2) ? argv[2] : DEFAULT_REPLY;
 
     // 创建套接字;
     int serverSocket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
@@ -115,7 +119,6 @@ int main(int argc, char* argv[]) {
                     continue;
                 }
                 std::cout << "Received message from client: " << buffer << std::endl;
-                std::string reply = "Select server received your message.";
                 int bytes_sent = send(clientSocket, reply.c_str(), reply.length(), 0);
                 if (bytes_sent == -1) {
                     std::cerr << "Failed to send message: " << errno << std::endl;

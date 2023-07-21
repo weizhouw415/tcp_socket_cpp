@@ -4,8 +4,8 @@
 
 int main(int argc, char* argv[]) {
     // 命令行参数
-    int port = atoi(argv[1]);
-    char *reply = argv[2];
+    int port = (argc > 1) ? atoi(argv[1]) : DEFAULT_PORT;
+    std::string reply = (argc > 2) ? argv[2] : DEFAULT_REPLY_MESSAGE;
 
     // 设置超时时间为5秒
     struct timeval timeout;
